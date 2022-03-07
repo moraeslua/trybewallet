@@ -10,10 +10,9 @@ export const addNewExpenseToWallet = (state) => (
 // fetch all currencies
 export const SAVE_ALL_CURRENCIES_SUCESS = 'SAVE_ALL_CURRENCIES_SUCESS';
 
-const saveAllCurrenciesSucess = (state) => {
-  console.log('chegou na action', state);
-  return { type: SAVE_ALL_CURRENCIES_SUCESS, payload: state };
-};
+const saveAllCurrenciesSucess = (state) => (
+  { type: SAVE_ALL_CURRENCIES_SUCESS, payload: state }
+);
 
 export const SAVE_ALL_CURRENCIES_FAIL = 'SAVE_ALL_CURRENCIES_FAIL';
 
@@ -22,11 +21,9 @@ const saveAllCurrenciesFail = (error) => (
 );
 
 export function getAllCurrenciesOptions() {
-  console.log('ta batendo aqui');
   return (dispatch) => currencyQuotesAPI()
     .then((response) => {
       const currenciesList = Object.keys(response);
-      console.log(currenciesList);
       dispatch(saveAllCurrenciesSucess(currenciesList));
     })
     .catch((error) => dispatch(saveAllCurrenciesFail(error)));

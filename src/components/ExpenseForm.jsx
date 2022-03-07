@@ -17,6 +17,14 @@ class ExpenseForm extends Component {
     tag: '',
   }
 
+  componentDidMount() {
+    this.setState({
+      currency: 'USD',
+      paymentMethod: 'Dinheiro',
+      tag: 'Alimentação',
+    });
+  }
+
   handleOnChangeInputsField = ({ target: { id, value } }) => {
     this.setState({ [id]: value });
   };
