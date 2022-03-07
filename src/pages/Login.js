@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import { saveUserPersonalData } from '../actions';
+import { saveUserPersonalData } from '../actions/userActions';
 
 class Login extends React.Component {
   state = {
