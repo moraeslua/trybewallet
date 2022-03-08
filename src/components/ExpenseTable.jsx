@@ -26,26 +26,26 @@ class ExpenseTable extends Component {
           <tr className="table">
             {expenseTableFields.map((field) => <th key={ field }>{field}</th>)}
           </tr>
-          {expenses.map((data) => {
-            const exchangeUsed = parseFloat(data.exchangeRates[data.currency].ask);
-            const currencyName = data.exchangeRates[data.currency].name;
-            const expensedValue = Number(data.value);
-            return (
-              <tbody key={ data.id }>
-                <tr>
-                  <td>{data.description}</td>
-                  <td>{data.tag}</td>
-                  <td>{data.method}</td>
-                  <td>{expensedValue.toFixed(2)}</td>
-                  <td>{currencyName}</td>
-                  <td>{exchangeUsed.toFixed(2)}</td>
-                  <td>{this.calculatePriceInBRL(data)}</td>
-                  <td>Real</td>
-                </tr>
-              </tbody>
-            );
-          })}
         </thead>
+        {expenses.map((data) => {
+          const exchangeUsed = parseFloat(data.exchangeRates[data.currency].ask);
+          const currencyName = data.exchangeRates[data.currency].name;
+          const expensedValue = Number(data.value);
+          return (
+            <tbody key={ data.id }>
+              <tr>
+                <td>{data.description}</td>
+                <td>{data.tag}</td>
+                <td>{data.method}</td>
+                <td>{expensedValue.toFixed(2)}</td>
+                <td>{currencyName}</td>
+                <td>{exchangeUsed.toFixed(2)}</td>
+                <td>{this.calculatePriceInBRL(data)}</td>
+                <td>Real</td>
+              </tr>
+            </tbody>
+          );
+        })}
       </table>
     );
   }
