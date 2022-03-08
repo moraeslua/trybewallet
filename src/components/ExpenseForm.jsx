@@ -13,14 +13,14 @@ class ExpenseForm extends Component {
     value: 0,
     description: '',
     currency: '',
-    paymentMethod: '',
+    method: '',
     tag: '',
   }
 
   componentDidMount() {
     this.setState({
       currency: 'USD',
-      paymentMethod: 'Dinheiro',
+      method: 'Dinheiro',
       tag: 'Alimentação',
     });
   }
@@ -30,7 +30,7 @@ class ExpenseForm extends Component {
   };
 
   handleSaveNewExpense = () => {
-    const { value, description, currency, paymentMethod, tag } = this.state;
+    const { value, description, currency, method, tag } = this.state;
     const { addCurrentExchangeRatesToNewExpense, expenses } = this.props;
     const newExpenseId = expenses.length;
     const newExpense = {
@@ -38,17 +38,18 @@ class ExpenseForm extends Component {
       value,
       description,
       currency,
-      paymentMethod,
+      method,
       tag,
     };
     addCurrentExchangeRatesToNewExpense(newExpense);
+    this.setState({ value: 0 });
   }
 
   render() {
-    const { value, description, currency, paymentMethod, tag } = this.state;
+    const { value, description, currency, method, tag } = this.state;
     const { currencies } = this.props;
 
-    const paymentMethodOptions = ['Dinheiro', 'Cartão de Crédito', 'Cartão de Débito'];
+    const paymentMethodOptions = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
     const tagOptions = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
 
     return (
@@ -78,9 +79,9 @@ class ExpenseForm extends Component {
           onChange={ this.handleOnChangeInputsField }
         />
         <Select
-          id="paymentMethod"
+          id="method"
           label="Método de Pagamento: "
-          value={ paymentMethod }
+          value={ method }
           testId="method-input"
           options={ paymentMethodOptions }
           onChange={ this.handleOnChangeInputsField }
