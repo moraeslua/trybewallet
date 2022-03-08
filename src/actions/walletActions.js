@@ -29,11 +29,22 @@ export function getAllCurrenciesOptions() {
     .catch((error) => dispatch(saveAllCurrenciesFail(error)));
 }
 
+export const CREATE_NEW_EXPENSE_ID = 'CREATE_NEW_EXPENSE_ID';
+
+const createNewExpenseId = () => ({ type: CREATE_NEW_EXPENSE_ID });
+
 export function addCurrentExchangeRatesToNewExpense(expense) {
   return (dispatch) => currencyQuotesAPI()
     .then((response) => {
       const exchangeRates = response;
       const expenseWithExchangeRates = { ...expense, exchangeRates };
+      dispatch(createNewExpenseId());
       dispatch(addNewExpenseToWallet(expenseWithExchangeRates));
     });
 }
+
+export const DELETE_EXPENSE_FROM_WALLET = 'DELETE_EXPENSE_FROM_WALLET';
+
+export const deleteExpenseFromWallet = (id) => (
+  { type: DELETE_EXPENSE_FROM_WALLET, payload: id }
+);

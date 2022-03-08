@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Button from './Button';
+import { deleteExpenseFromWallet } from '../actions/walletActions';
 
 class ExpenseTable extends Component {
-  calculatePriceInBRL({ value, currency, exchangeRates }) {
-    console.log(exchangeRates);
-    console.log(exchangeRates[currency].ask);
+  calculateExpensedValueInBRL = ({ value, currency, exchangeRates }) => {
     const currencyConvertedToBRL = exchangeRates[currency].ask;
-    const expenseValueInBRL = value * currencyConvertedToBRL;
-    return expenseValueInBRL.toFixed(2);
+    const expensedValueInBRL = value * currencyConvertedToBRL;
+    return expensedValueInBRL.toFixed(2);
+  }
+
+  handleOnClickDeleteButton = (id) => {
+    const { dispatch } = this.props;
+    dispatch(deleteExpenseFromWallet(id));
   }
 
   render() {
@@ -40,8 +45,16 @@ class ExpenseTable extends Component {
                 <td>{expensedValue.toFixed(2)}</td>
                 <td>{currencyName}</td>
                 <td>{exchangeUsed.toFixed(2)}</td>
-                <td>{this.calculatePriceInBRL(data)}</td>
+                <td>{this.calculateExpensedValueInBRL(data)}</td>
                 <td>Real</td>
+                <td>
+                  <Button
+                    label="excluir"
+                    onClick={ () => this.handleOnClickDeleteButton(data.id) }
+                    isDisabled={ false }
+                    testId="delete-btn"
+                  />
+                </td>
               </tr>
             </tbody>
           );
@@ -53,6 +66,7 @@ class ExpenseTable extends Component {
 
 ExpenseTable.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

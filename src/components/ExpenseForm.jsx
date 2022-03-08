@@ -31,10 +31,8 @@ class ExpenseForm extends Component {
 
   handleSaveNewExpense = () => {
     const { value, description, currency, method, tag } = this.state;
-    const { addCurrentExchangeRatesToNewExpense, expenses } = this.props;
-    const newExpenseId = expenses.length;
+    const { addCurrentExchangeRatesToNewExpense } = this.props;
     const newExpense = {
-      id: newExpenseId,
       value,
       description,
       currency,
@@ -97,6 +95,7 @@ class ExpenseForm extends Component {
         <Button
           label="Adicionar despesa"
           isDisabled={ false }
+          testId="add-exchange"
           onClick={ this.handleSaveNewExpense }
         />
       </form>
@@ -106,13 +105,11 @@ class ExpenseForm extends Component {
 
 ExpenseForm.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
-  expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
   addCurrentExchangeRatesToNewExpense: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
-  expenses: state.wallet.expenses,
 });
 
 const mapDispatchToProps = (dispatch) => ({

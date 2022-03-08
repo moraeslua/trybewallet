@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 class Header extends Component {
-  sumTotalAmountOfExpenses(expenses = []) {
+  sumTotalAmountOfExpenses = (expenses = []) => {
     const expensesAmount = expenses.reduce((acc, { currency, exchangeRates, value }) => {
       const currencyConvertedToBRL = exchangeRates[currency].ask;
       const expenseValueInBRL = value * currencyConvertedToBRL;
