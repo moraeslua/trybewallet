@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './ExpenseTable.css';
 import PropTypes from 'prop-types';
 
 class ExpenseTable extends Component {
