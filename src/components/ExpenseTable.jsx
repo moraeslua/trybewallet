@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ExpenseTable.css';
+import PropTypes from 'prop-types';
 
 class ExpenseTable extends Component {
-  calculateExpenseInBRL({ value, currency, exchangeRates }) {
+  calculatePriceInBRL({ value, currency, exchangeRates }) {
     console.log(exchangeRates);
     console.log(exchangeRates[currency].ask);
     const currencyConvertedToBRL = exchangeRates[currency].ask;
@@ -39,7 +40,7 @@ class ExpenseTable extends Component {
                   <td>{expensedValue.toFixed(2)}</td>
                   <td>{currencyName}</td>
                   <td>{exchangeUsed.toFixed(2)}</td>
-                  <td>{this.calculateExpenseInBRL(data)}</td>
+                  <td>{this.calculatePriceInBRL(data)}</td>
                   <td>Real</td>
                 </tr>
               </tbody>
@@ -50,6 +51,10 @@ class ExpenseTable extends Component {
     );
   }
 }
+
+ExpenseTable.propTypes = {
+  expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
