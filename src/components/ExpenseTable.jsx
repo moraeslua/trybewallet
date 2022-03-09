@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Button from './Button';
-import { deleteExpenseFromWallet } from '../actions/walletActions';
+import { deleteExpenseFromWallet as deleteExpense,
+  turnOnExpenseEditMode as turnOnEditMode,
+} from '../actions/walletActions';
 
 class ExpenseTable extends Component {
   calculateExpensedValueInBRL = ({ value, currency, exchangeRates }) => {
@@ -12,8 +14,13 @@ class ExpenseTable extends Component {
   }
 
   handleOnClickDeleteButton = (id) => {
-    const { dispatch } = this.props;
-    dispatch(deleteExpenseFromWallet(id));
+    const { deleteExpenseFromWallet } = this.props;
+    deleteExpenseFromWallet(id);
+  }
+
+  handleOnClickEditButton = (id) => {
+    const { turnOnExpenseEditMode } = this.props;
+    turnOnExpenseEditMode(id);
   }
 
   render() {
@@ -49,7 +56,13 @@ class ExpenseTable extends Component {
                 <td>Real</td>
                 <td>
                   <Button
-                    label="excluir"
+                    label="Editar"
+                    onClick={ () => this.handleOnClickEditButton(data.id) }
+                    isDisabled={ false }
+                    testId="edit-btn"
+                  />
+                  <Button
+                    label="Excluir"
                     onClick={ () => this.handleOnClickDeleteButton(data.id) }
                     isDisabled={ false }
                     testId="delete-btn"
@@ -64,13 +77,19 @@ class ExpenseTable extends Component {
   }
 }
 
-ExpenseTable.propTypes = {
-  expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dispatch: PropTypes.func.isRequired,
-};
-
 const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
 });
 
-export default connect(mapStateToProps, null)(ExpenseTable);
+const mapDispatchToProps = (dispatch) => ({
+  turnOnExpenseEditMode: (id) => dispatch(turnOnEditMode(id)),
+  deleteExpenseFromWallet: (id) => dispatch(deleteExpense(id)),
+});
+
+ExpenseTable.propTypes = {
+  expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
+  turnOnExpenseEditMode: PropTypes.func.isRequired,
+  deleteExpenseFromWallet: PropTypes.func.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseTable);

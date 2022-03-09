@@ -33,7 +33,7 @@ export const CREATE_NEW_EXPENSE_ID = 'CREATE_NEW_EXPENSE_ID';
 
 const createNewExpenseId = () => ({ type: CREATE_NEW_EXPENSE_ID });
 
-export function addCurrentExchangeRatesToNewExpense(expense) {
+export function addNewExpenseWithCurrentExchangeRates(expense) {
   return (dispatch) => currencyQuotesAPI()
     .then((response) => {
       const exchangeRates = response;
@@ -47,4 +47,27 @@ export const DELETE_EXPENSE_FROM_WALLET = 'DELETE_EXPENSE_FROM_WALLET';
 
 export const deleteExpenseFromWallet = (id) => (
   { type: DELETE_EXPENSE_FROM_WALLET, payload: id }
+);
+
+// TURN ON EDIT MODE
+
+export const TURN_ON_EXPENSE_EDIT_MODE = 'TURN_ON_EXPENSE_EDIT_MODE';
+
+export const turnOnExpenseEditMode = (id) => (
+  { type: TURN_ON_EXPENSE_EDIT_MODE, payload: id }
+);
+
+// salvar alterações da despesa editada
+export const SAVE_EXPENSE_CHANGES_IN_EDIT_MODE = 'SAVE_EXPENSE_CHANGES_IN_EDIT_MODE';
+
+export const saveExpenseChangesInEditMode = (expenseChanged) => (
+  { type: SAVE_EXPENSE_CHANGES_IN_EDIT_MODE, payload: expenseChanged }
+);
+
+// TURN OFF EDIT MODE
+
+export const TURN_OFF_EXPENSE_EDIT_MODE = 'TURN_OFF_EXPENSE_EDIT_MODE';
+
+export const turnOffExpenseEditMode = (id) => (
+  { type: TURN_OFF_EXPENSE_EDIT_MODE, payload: id }
 );

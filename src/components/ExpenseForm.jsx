@@ -5,7 +5,9 @@ import Input from './Input';
 import Select from './Select';
 import Button from './Button';
 import {
-  addCurrentExchangeRatesToNewExpense as addExpense,
+  addNewExpenseWithCurrentExchangeRates as addExpense,
+  saveExpenseChangesInEditMode as saveExpenseChanged,
+  turnOffExpenseEditMode as turnOffEditMode,
 } from '../actions/walletActions';
 
 class ExpenseForm extends Component {
@@ -31,7 +33,7 @@ class ExpenseForm extends Component {
 
   handleSaveNewExpense = () => {
     const { value, description, currency, method, tag } = this.state;
-    const { addCurrentExchangeRatesToNewExpense } = this.props;
+    const { addNewExpenseWithCurrentExchangeRates } = this.props;
     const newExpense = {
       value,
       description,
@@ -39,13 +41,20 @@ class ExpenseForm extends Component {
       method,
       tag,
     };
-    addCurrentExchangeRatesToNewExpense(newExpense);
+    addNewExpenseWithCurrentExchangeRates(newExpense);
     this.setState({ value: 0 });
+  }
+
+  handleSaveEditedExpense = () => {
+    const { saveExpenseChangesInEditMode, turnOffExpenseEditMode } = this.props;
+    const expenseChanged = this.state;
+    saveExpenseChangesInEditMode(expenseChanged);
+    turnOffExpenseEditMode();
   }
 
   render() {
     const { value, description, currency, method, tag } = this.state;
-    const { currencies } = this.props;
+    const { currencies, isExpenseEditModeDisabled } = this.props;
 
     const paymentMethodOptions = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
     const tagOptions = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
@@ -92,28 +101,51 @@ class ExpenseForm extends Component {
           options={ tagOptions }
           onChange={ this.handleOnChangeInputsField }
         />
-        <Button
-          label="Adicionar despesa"
-          isDisabled={ false }
-          testId="add-exchange"
-          onClick={ this.handleSaveNewExpense }
-        />
+        {isExpenseEditModeDisabled
+          ? (
+            <Button
+              label="Adicionar despesa"
+              isDisabled={ false }
+              testId="add-exchange"
+              onClick={ this.handleSaveNewExpense }
+            />
+          )
+          : (
+            <Button
+              label="Editar despesa"
+              isDisabled={ false }
+              testId="edit-exchange"
+              onClick={ this.handleSaveEditedExpense }
+            />
+          )}
       </form>
     );
   }
 }
 
-ExpenseForm.propTypes = {
-  currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
-  addCurrentExchangeRatesToNewExpense: PropTypes.func.isRequired,
-};
-
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
+  isExpenseEditModeDisabled: state.wallet.isExpenseEditModeDisabled,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addCurrentExchangeRatesToNewExpense: (expense) => dispatch(addExpense(expense)),
+  addNewExpenseWithCurrentExchangeRates: (expense) => dispatch(addExpense(expense)),
+  saveExpenseChangesInEditMode: (expenseChanged) => (
+    dispatch(saveExpenseChanged(expenseChanged))
+  ),
+  turnOffExpenseEditMode: () => dispatch(turnOffEditMode()),
 });
+
+ExpenseForm.propTypes = {
+  currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
+  addNewExpenseWithCurrentExchangeRates: PropTypes.func.isRequired,
+  isExpenseEditModeDisabled: PropTypes.bool,
+  saveExpenseChangesInEditMode: PropTypes.func.isRequired,
+  turnOffExpenseEditMode: PropTypes.func.isRequired,
+};
+
+ExpenseForm.defaultProps = {
+  isExpenseEditModeDisabled: true,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExpenseForm);
